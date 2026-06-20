@@ -356,8 +356,6 @@ Dessa forma, os testes não interferem nos dados usados na execução principal 
 | Execução via Docker | README orienta `docker compose up --build` como fluxo principal. |
 | Não depender de npm run dev/start | Execução principal usa Docker Compose; scripts npm ficam apenas como suporte interno dos containers. |
 | Swagger | Documentação disponível em `/api-docs`, configurada em `backend/src/docs/swagger.js`. |
-| Documentação escrita mínima | Seção [Documentação escrita da atividade](#documentação-escrita-da-atividade) descreve arquitetura, tecnologias e decisões. |
 | Código-fonte da API | Código presente em `backend/src/`. |
 | Frontend/site para gerenciamento | Interface React/Tailwind em `frontend/`, com cadastro, login e CRUD visual dos bens. |
-| Link público via GitHub | Projeto preparado para publicação em repositório público. Basta subir a pasta `Avaliação2_Fullstack`. |
 
