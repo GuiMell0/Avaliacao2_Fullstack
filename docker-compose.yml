@@ -1,0 +1,132 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: avaliacao2_fullstack_backend
+    env_file:
+      - ./.env.example
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      CORS_ORIGIN: http://localhost:8080
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: avaliacao2_fullstack
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_DIALECT: postgres
+      MONGO_URI: mongodb://mongo:27017/avaliacao2_fullstack_nosql
+      JWT_SECRET: tJ94ZqUMrUJTvjBYzMSclu4VDaUIRtrZwgcfcjYQdzQS
+      JWT_EXPIRES_IN: 1d
+      DEFAULT_ADMIN_NAME: Administrador
+      DEFAULT_ADMIN_EMAIL: admin@bens.com
+      DEFAULT_ADMIN_PASSWORD: Admin@123456
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: avaliacao2_fullstack_frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: on-failure
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: avaliacao2_fullstack_postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: avaliacao2_fullstack
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d avaliacao2_fullstack"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  mongo:
+    image: mongo:6-jammy
+    container_name: avaliacao2_fullstack_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api-test:
+    profiles:
+      - test
+    build:
+      context: ./backend
+    container_name: avaliacao2_fullstack_api_tests
+    env_file:
+      - ./.env.example
+    environment:
+      NODE_ENV: test
+      PORT: 3000
+      DB_HOST: postgres-test
+      DB_PORT: 5432
+      DB_NAME: avaliacao2_fullstack_test
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_DIALECT: postgres
+      MONGO_URI: mongodb://mongo-test:27017/avaliacao2_fullstack_nosql_test
+      JWT_SECRET: tJ94ZqUMrUJTvjBYzMSclu4VDaUIRtrZwgcfcjYQdzQS
+      JWT_EXPIRES_IN: 1d
+    command: npm test
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      mongo-test:
+        condition: service_healthy
+
+  postgres-test:
+    profiles:
+      - test
+    image: postgres:15-alpine
+    container_name: avaliacao2_fullstack_postgres_test
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: avaliacao2_fullstack_test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d avaliacao2_fullstack_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  mongo-test:
+    profiles:
+      - test
+    image: mongo:6-jammy
+    container_name: avaliacao2_fullstack_mongo_test
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  postgres_data:
+  mongo_data:

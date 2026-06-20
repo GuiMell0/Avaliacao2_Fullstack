@@ -1,0 +1,57 @@
+{
+  "name": "avaliacao2-fullstack-api",
+  "version": "1.0.0",
+  "description": "API da Avaliação2 de Laboratório de Programação Fullstack para gerenciamento de bens pessoais com Node.js, Express, PostgreSQL, MongoDB, JWT, Swagger, Docker e testes de integração.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test:coverage": "jest --runInBand --coverage --detectOpenHandles --forceExit"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "postgresql",
+    "sequelize",
+    "mongodb",
+    "mongoose",
+    "jwt",
+    "docker",
+    "swagger",
+    "jest",
+    "supertest"
+  ],
+  "author": "Guilherme Viana Ramos Mello",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "morgan": "^1.10.0",
+    "pg": "^8.13.1",
+    "sequelize": "^6.37.5",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ]
+  }
+}

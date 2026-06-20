@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+const { env } = require('./env');
+
+async function connectMongo() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  await mongoose.connect(env.mongoUri, {
+    autoIndex: true,
+  });
+
+  return mongoose.connection;
+}
+
+module.exports = { connectMongo };
